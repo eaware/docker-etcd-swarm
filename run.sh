@@ -130,7 +130,7 @@ if [[ $? -ne 0 ]]; then
     fi
     INITIAL_CLUSTER_TOKEN=$RESTORED_SERVICE
     echo "restoring snapshot..."
-    ETCDCTL_API=3 etcdctl snapshot restore /backup.db \
+    etcdctl snapshot restore /backup.db \
       --name $NODE_NAME \
       --initial-cluster $INITIAL_CLUSTER \
       --initial-cluster-token $INITIAL_CLUSTER_TOKEN \
@@ -164,7 +164,7 @@ if [[ $? -eq 0 ]]; then
 fi
 
 
-(sleep 3 && ETCDCTL_API=3 /bin/etcdctl put ping pong) &
+(sleep 3 && /bin/etcdctl put ping pong) &
 if [[ -n "$TEST" ]]; then
   if [ "${ARGS:0:1}" = '-' ]; then
     echo "Running etcd [/bin/etcd $ARGS]"
@@ -175,7 +175,7 @@ if [[ -n "$TEST" ]]; then
   fi
   echo "Running test..."
   sleep 4
-  ETCDCTL_API=3 timeout -t 1 /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep pong && echo "passed"
+  timeout -t 1 /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep pong && echo "passed"
   if [ $? -ne 0 ]; then
     echo "failed"
     exit 1
