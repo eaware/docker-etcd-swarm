@@ -1,7 +1,7 @@
 FROM alpine:edge
 ARG ETCD_VERSION=2.3.8
 ENV CLUSTER_SIZE 3
-ADD run.sh /bin/run.sh
+ADD run.sh /bin/
 RUN apk add --update ca-certificates curl bash tar && \
     apk add tini --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted && \
     curl -L https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz -o etcd.tar.gz && \
