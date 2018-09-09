@@ -1,5 +1,5 @@
 FROM alpine:edge
-ARG ETCD_VERSION=2.3.8
+ARG ETCD_VERSION=3.3.9
 ENV CLUSTER_SIZE 3
 ADD run.sh /bin/
 RUN apk add --update ca-certificates curl bash tar bind-tools && \
