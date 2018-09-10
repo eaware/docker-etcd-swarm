@@ -50,9 +50,9 @@ if [[ $? -ne 0 ]]; then
     echo "found IP in /etc/hosts: $cip"
   else
     echo "resolved IP: $cip"
-    SERVICE_NAME=$(dig +noall +answer -x $cip | awk '{ print $5 }' | cut -d "." -f 1)
-    echo "resolved service name: $SERVICE_NAME"
   fi
+  SERVICE_NAME=$(dig +noall +answer -x $cip | awk '{ print $5 }' | cut -d "." -f 1)
+  echo "resolved service name: $SERVICE_NAME"
   echo "$cip" | egrep -qe "^[0-9\.]+$"
   if [ $? -ne 0 ]; then
     echo "error: unable to get this container's IP ($cip)"
@@ -78,13 +78,13 @@ if [[ $? -ne 0 ]]; then
       echo "$nbt seeds found"
     fi
     for tip in $tips; do
-      name="${SERVICE_NAME}-${tip##*.}"
+      name=$(dig +noall +answer -x $tip | awk '{ print $5 }' | cut -d "." -f 3)	    
       [[ -z "$INITIAL_CLUSTER" ]] && INITIAL_CLUSTER="$name=http://$tip:2380" || INITIAL_CLUSTER="$INITIAL_CLUSTER,$name=http://$tip:2380"
       if [[ "$cip" = "$tip" ]]; then
         NODE_NAME=$name
       else
         # check if a cluster already exists
-	    echo "checking existing cluster with $name"
+        echo "checking existing cluster with $name"
         timeout -t 2 etcdctl --endpoints $tip:2379 get probe-members >/dev/null 2>&1 && INITIAL_CLUSTER_STATE=existing
       fi
     done
