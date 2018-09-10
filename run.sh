@@ -5,15 +5,12 @@ fi
 
 echo -n "$(date +%F\ %T) I | Running "
 /bin/etcd --version
-
+sleep 3
 INITIAL_CLUSTER_TOKEN=etcd-cluster
 INITIAL_CLUSTER_STATE=new
 NODE_NAME=default
 # lock file to make sure we're not running multiple containers on the same volume
 LOCK_FILE=/data/ctr.lck
-
-# random sleep 1-5 seconds
-sleep $[ ( $RANDOM % 5 )  + 1 ]s
 
 ARGS="--data-dir=/data"
 echo "$@" | grep -q -- "-auto-compaction-retention"
