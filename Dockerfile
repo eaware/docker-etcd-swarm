@@ -2,6 +2,8 @@ FROM alpine:edge
 ARG ETCD_VERSION=3.3.9
 ENV CLUSTER_SIZE 3
 ENV ETCDCTL_API 3
+ENV ETCD_HEARTBEAT_INTERVAL 10 
+ENV ETCD_ELECTION_TIMEOUT 100
 ADD run.sh /bin/
 RUN apk add --update ca-certificates curl bash tar bind-tools && \
     apk add tini --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted && \
