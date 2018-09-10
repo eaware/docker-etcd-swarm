@@ -12,6 +12,9 @@ NODE_NAME=default
 # lock file to make sure we're not running multiple containers on the same volume
 LOCK_FILE=/data/ctr.lck
 
+# random sleep 1-5 seconds
+sleep $[ ( $RANDOM % 5 )  + 1 ]s
+
 ARGS="--data-dir=/data"
 echo "$@" | grep -q -- "-auto-compaction-retention"
 if [[ $? -ne 0 ]]; then
