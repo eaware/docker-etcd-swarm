@@ -164,26 +164,26 @@ if [[ $? -eq 0 ]]; then
 fi
 
 
-#(sleep 3 && /bin/etcdctl cluster-health) &
-#if [[ -n "$TEST" ]]; then
-#  if [ "${ARGS:0:1}" = '-' ]; then
-#    echo "Running etcd [/bin/etcd $ARGS]"
-#    /bin/etcd $ARGS &
-#  else
-#    echo "Running etcd [$ARGS]"
-#    $ARGS &
-#  fi
-#  echo "Running test..."
-#  sleep 4
-#  timeout -t 1 /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep pong && echo "passed"
-#  if [ $? -ne 0 ]; then
-#    echo "failed"
-#    exit 1
-#  fi
-#else
-#  if [ "${ARGS:0:1}" = '-' ]; then
-#    exec flock -xn $LOCK_FILE /bin/etcd $ARGS
-#  else
-#    exec $ARGS
-#  fi
-#fi
+(sleep 3 && ETCDCTL_API=3 /bin/etcdctl put ping pong) &
+if [[ -n "$TEST" ]]; then
+  if [ "${ARGS:0:1}" = '-' ]; then
+    echo "Running etcd [/bin/etcd $ARGS]"
+    /bin/etcd $ARGS &
+  else
+    echo "Running etcd [$ARGS]"
+    $ARGS &
+  fi
+  echo "Running test..."
+  sleep 4
+  timeout -t 1 /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep pong && echo "passed"
+  if [ $? -ne 0 ]; then
+    echo "failed"
+    exit 1
+  fi
+else
+  if [ "${ARGS:0:1}" = '-' ]; then
+    exec flock -xn $LOCK_FILE /bin/etcd $ARGS
+  else
+    exec $ARGS
+  fi
+fi
