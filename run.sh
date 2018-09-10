@@ -37,7 +37,7 @@ if [[ $? -ne 0 ]]; then
   SECONDS=0
   echo "resolving the container IP with Docker DNS..."
   while [ -z "$cip" ]; do 
-    cip=$(dig +short $(hostname))
+    cip=$(dig @127.0.0.11 +short $(hostname))
     # checking that the returned IP is really an IP
     echo "$cip" | egrep -qe "^[0-9\.]+$"
     if [ -z "$cip" ]; then
@@ -54,7 +54,7 @@ if [[ $? -ne 0 ]]; then
   else
     echo "resolved IP: $cip"
   fi
-  SERVICE_NAME=$(dig +noall +answer -x $cip | awk '{ print $5 }' | cut -d "." -f 1)
+  SERVICE_NAME=$(dig @127.0.0.11 +noall +answer -x $cip | awk '{ print $5 }' | cut -d "." -f 1)
   echo "resolved service name: $SERVICE_NAME"
   echo "$cip" | egrep -qe "^[0-9\.]+$"
   if [ $? -ne 0 ]; then
@@ -70,7 +70,7 @@ if [[ $? -ne 0 ]]; then
     SECONDS=0
     echo "waiting for the min seeds count ($CLUSTER_SIZE)"
     while [[ $nbt -lt ${CLUSTER_SIZE} ]]; do
-      tips=$(dig +short tasks.$SERVICE_NAME)
+      tips=$(dig @127.0.0.11 +short tasks.$SERVICE_NAME)
       nbt=$(echo $tips | wc -w)
       [[ $SECONDS -gt 30 ]] && break
     done
