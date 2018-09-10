@@ -8,10 +8,9 @@ RUN apk add --update ca-certificates curl bash tar bind-tools && \
     curl -L https://github.com/coreos/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz -o etcd.tar.gz && \
     tar xzf etcd.tar.gz && \
     mv etcd-*/etcd /etcd-*/etcdctl /bin/ && \
-    /bin/etcd --version && \
     rm -rf etcd.tar.gz etcd-*
 VOLUME      /data
 EXPOSE      2379 2380 4001 7001
-HEALTHCHECK --interval=3s --retries=3 --timeout=1s --start-period=120s CMD /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep -q pong
+#HEALTHCHECK --interval=3s --retries=3 --timeout=1s --start-period=120s CMD /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep -q pong
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/bin/run.sh"]
