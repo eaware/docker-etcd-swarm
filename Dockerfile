@@ -1,6 +1,7 @@
 FROM alpine:edge
 ARG ETCD_VERSION=3.3.9
 ENV CLUSTER_SIZE 3
+ENV ETCDCTL_API 3
 ADD run.sh /bin/
 RUN apk add --update ca-certificates curl bash tar bind-tools && \
     apk add tini --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted && \
@@ -11,6 +12,6 @@ RUN apk add --update ca-certificates curl bash tar bind-tools && \
     rm -rf etcd.tar.gz etcd-*
 VOLUME      /data
 EXPOSE      2379 2380 4001 7001
-#HEALTHCHECK --interval=3s --retries=3 --timeout=1s --start-period=120s CMD /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep -q pong
+HEALTHCHECK --interval=3s --retries=3 --timeout=1s --start-period=120s CMD /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep -q pong
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/bin/run.sh"]

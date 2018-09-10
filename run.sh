@@ -164,7 +164,7 @@ if [[ $? -eq 0 ]]; then
 fi
 
 
-(sleep 3 && ETCDCTL_API=3 /bin/etcdctl put ping pong) &
+(sleep 3 && /bin/etcdctl put ping pong) &
 if [[ -n "$TEST" ]]; then
   if [ "${ARGS:0:1}" = '-' ]; then
     echo "Running etcd [/bin/etcd $ARGS]"
