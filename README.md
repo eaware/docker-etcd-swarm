@@ -1,29 +1,42 @@
 # README #
-
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+This etcd cluster is designed to be run on a docker swarm. Most of the code is from [appcelerator/etcd](https://hub.docker.com/r/appcelerator/etcd/)
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* You can use the docker-stack.yml
+```
+version: "3.4"
+services:
+  etcd:
+    image: splazit/etcd-swarm
+    deploy:
+      placement:
+        constraints: [node.role ==  manager]
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+        delay: 30s
+root@do-docker900:~/docker-etcd-swarm# ls
+Dockerfile  README.md  docker-stack.yml  run.sh
+root@do-docker900:~/docker-etcd-swarm# vim README.md
 
-### Contribution guidelines ###
+[1]+  Stopped                 vim README.md
+root@do-docker900:~/docker-etcd-swarm# cat docker-stack.yml
+version: "3.4"
 
-* Writing tests
-* Code review
-* Other guidelines
+services:
+  etcd:
+    image: splazit/etcd-swarm
+    deploy:
+      placement:
+        constraints: [node.role ==  manager]
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+        delay: 30s
+```
+* Or run the following docker command
+```
+docker service create --update-delay 45s --replicas 3 --name etcd --constraint 'node.role == manager' splazit/etcd-swarm
+``` 
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact

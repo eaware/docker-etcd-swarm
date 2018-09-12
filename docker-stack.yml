@@ -1,0 +1,12 @@
+version: "3.4"
+
+services:
+  etcd:
+    image: splazit/etcd-swarm
+    deploy:
+      placement:
+        constraints: [node.role ==  manager]
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+        delay: 30s
