@@ -1,9 +1,13 @@
-version: "3.4"
+version: "3.8"
 
 services:
   etcd:
-    image: splazit/etcd-swarm
+    #image: splazit/etcd-swarm
+    image: etcdtest
+    ports: 
+      - 2379-2380:2379-2380
     deploy:
+      replicas: 3
       placement:
         constraints: [node.role ==  manager]
       update_config:
