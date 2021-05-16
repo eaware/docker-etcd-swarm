@@ -20,8 +20,8 @@ ENV ETCD_HEARTBEAT_INTERVAL 10
 ENV ETCD_ELECTION_TIMEOUT 100
 
 COPY --from=builder /bin/etcd /bin/etcdctl /bin/
-RUN chmod 700 /data
-VOLUME      /data
+VOLUME [ "/data" ]
+RUN mkdir /data && chmod 700 /data
 EXPOSE      2379 2380 4001 7001
 HEALTHCHECK --interval=3s --retries=3 --timeout=1s --start-period=120s CMD /bin/etcdctl --endpoints=http://127.0.0.1:2379 get ping | grep -q pong
 ENTRYPOINT ["/sbin/tini", "--"]
